@@ -1,0 +1,138 @@
+version: '3.5'
+
+networks:
+  ytoken-network:
+    name: ytoken-network
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.29.101.0/24
+
+volumes:
+  ytoken-postgres-vol1:
+   name: ytoken-postgres-vol1
+  ytoken-postgres-vol2:
+   name: ytoken-postgres-vol2
+  ytoken-postgres-vol3:
+   name: ytoken-postgres-vol3
+  blockstore1:
+   name: blockstore1
+  blockstore2:
+   name: blockstore2
+  blockstore3:
+   name: blockstore3
+
+services:
+  ytoken-postgres1:
+    image: postgres:13
+    container_name: ytoken-postgres1
+    command: -c max_prepared_transactions=100
+    restart: unless-stopped  
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+    networks:
+      ytoken-network:
+        ipv4_address: 172.29.101.21
+    volumes:
+      - type: volume
+        source: ytoken-postgres-vol1
+        target: /var/lib/postgresql/data
+
+  ytoken-iroha1:
+    image: hyperledger/iroha:1.1.1
+    container_name: ytoken-iroha1
+    restart: unless-stopped  
+    depends_on:
+      - ytoken-postgres1
+    tty: true
+    environment:
+      - KEY=node1
+    entrypoint:
+      - /opt/iroha_data/entrypoint.sh
+    networks:
+      ytoken-network:
+        ipv4_address: 172.29.101.121
+    volumes:
+      - ./node1:/opt/iroha_data
+      - type: volume
+        source: blockstore1
+        target: /tmp/block_store1
+    ports:
+      - 50051:50051
+
+  ytoken-postgres2:
+    image: postgres:13
+    container_name: ytoken-postgres2
+    command: -c max_prepared_transactions=100
+    restart: unless-stopped  
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+    networks:
+      ytoken-network:
+        ipv4_address: 172.29.101.22
+    volumes:
+      - type: volume
+        source: ytoken-postgres-vol2
+        target: /var/lib/postgresql/data
+
+  ytoken-iroha2:
+    image: hyperledger/iroha:1.1.1
+    container_name: ytoken-iroha2
+    restart: unless-stopped  
+    depends_on:
+      - ytoken-postgres2
+    tty: true
+    environment:
+      - KEY=node2
+    entrypoint:
+      - /opt/iroha_data/entrypoint.sh
+    networks:
+      ytoken-network:
+        ipv4_address: 172.29.101.122
+    volumes:
+      - ./node2:/opt/iroha_data
+      - type: volume
+        source: blockstore2
+        target: /tmp/block_store2
+    ports:
+      - 50052:50052
+
+  ytoken-postgres3:
+    image: postgres:13
+    container_name: ytoken-postgres3
+    command: -c max_prepared_transactions=100
+    restart: unless-stopped  
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+    networks:
+      ytoken-network:
+        ipv4_address: 172.29.101.23
+    volumes:
+      - type: volume
+        source: ytoken-postgres-vol3
+        target: /var/lib/postgresql/data
+
+  ytoken-iroha3:
+    image: hyperledger/iroha:1.1.1
+    container_name: ytoken-iroha3
+    restart: unless-stopped  
+    depends_on:
+      - ytoken-postgres3
+    tty: true
+    environment:
+      - KEY=node3
+    entrypoint:
+      - /opt/iroha_data/entrypoint.sh
+    networks:
+      ytoken-network:
+        ipv4_address: 172.29.101.123
+    volumes:
+      - ./node3:/opt/iroha_data
+      - type: volume
+        source: blockstore3
+        target: /tmp/block_store3
+    ports:
+      - 50053:50053

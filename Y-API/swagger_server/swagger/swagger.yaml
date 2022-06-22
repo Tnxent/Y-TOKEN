@@ -1,0 +1,500 @@
+openapi: 3.0.2
+info:
+  title: Especificación de Y-API
+  description: API para Y-Token
+  contact:
+    name: Yunsong Zhang
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+servers:
+- url: http://127.0.0.1:80
+  description: Servidor local
+tags:
+- name: Y-Token
+  description: Y-Token
+paths:
+  /ytoken/account/register:
+    post:
+      tags:
+      - Y-Token
+      summary: Registrar una nueva cuenta de Y-Token.
+      description: Registra una nueva cuenta de Y-Token.
+      operationId: account_post
+      requestBody:
+        $ref: '#/components/requestBodies/accountRB'
+      responses:
+        "201":
+          description: cuenta registrada
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        "422":
+          description: "`UNPROCESSABLE ENTITY`: ERROR"
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTP_Problem'
+              examples:
+                response-http-422:
+                  $ref: '#/components/examples/response-http-422'
+      x-openapi-router-controller: swagger_server.controllers.y_token_controller
+  /ytoken/{accountId}/domain/{assetDomain}:
+    get:
+      tags:
+      - Y-Token
+      summary: Recuperar el saldo de Y-Token de un dominio concreto.
+      description: Devuelve el saldo de Y-Token de la cuenta identificada por su id
+        y su clave privada.
+      operationId: ytoken_get
+      parameters:
+      - name: accountId
+        in: path
+        description: El id de la cuenta
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: assetDomain
+        in: path
+        description: Nombre del dominio al que pertenece el Y-Token.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Consulta de saldo OK
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Balance'
+        "404":
+          description: "`NOT FOUND`: recurso no disponible"
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTP_Problem'
+              examples:
+                response-http-404:
+                  $ref: '#/components/examples/response-http-404'
+      security:
+      - PrivateKey: []
+      x-openapi-router-controller: swagger_server.controllers.y_token_controller
+    post:
+      tags:
+      - Y-Token
+      summary: Aumentar la cantidad de Y-Token de un dominio concreto para una cuenta.
+      description: Aumenta la cantidad de Y-Token de una cuenta identificada por su
+        id y la clave privada.
+      operationId: ytoken_post
+      parameters:
+      - name: accountId
+        in: path
+        description: El id de la cuenta
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: assetDomain
+        in: path
+        description: Nombre del dominio al que pertenece el Y-Token
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/topupRB'
+      responses:
+        "200":
+          description: "`OK`: el saldo de Y-Token ha sido aumentado correctamente"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topup'
+        "404":
+          description: "`NOT FOUND`: recurso no disponible"
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTP_Problem'
+              examples:
+                response-http-404:
+                  $ref: '#/components/examples/response-http-404'
+        "412":
+          description: "`PRECONDITION FAILED`: no se cumple alguna condición previa"
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTP_Problem'
+              examples:
+                response-http-412:
+                  $ref: '#/components/examples/response-http-412'
+      security:
+      - DomainAdminPrivateKey: []
+      x-openapi-router-controller: swagger_server.controllers.y_token_controller
+  /ytoken/transfer/domain/{assetDomain}:
+    post:
+      tags:
+      - Y-Token
+      summary: Crear una nueva tranferencia.
+      description: Crea una nueva tranferencia.
+      operationId: transfer_post
+      parameters:
+      - name: assetDomain
+        in: path
+        description: Nombre del dominio de Y-Token
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/transferRB'
+      responses:
+        "201":
+          description: transaccion creada
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfer'
+        "422":
+          description: "`UNPROCESSABLE ENTITY`: falta algún dato necesario"
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTP_Problem'
+              examples:
+                response-http-422:
+                  $ref: '#/components/examples/response-http-422'
+      security:
+      - PrivateKey: []
+      x-openapi-router-controller: swagger_server.controllers.y_token_controller
+  /ytoken/transaction/{transactionHash}:
+    get:
+      tags:
+      - Y-Token
+      summary: Recuperar los detalles de una transaccion identificada por su hash.
+      description: Recupera los detalles de una transaccion identificada por su hash.
+      operationId: transaction_get
+      parameters:
+      - name: transactionHash
+        in: path
+        description: El hash de la transacción
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Transacción encontrada
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        "404":
+          description: "`NOT FOUND`: recurso no disponible"
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTP_Problem'
+              examples:
+                response-http-404:
+                  $ref: '#/components/examples/response-http-404'
+      x-openapi-router-controller: swagger_server.controllers.y_token_controller
+components:
+  schemas:
+    Account:
+      type: object
+      properties:
+        account_id:
+          type: string
+          description: Id de la cuenta.
+        hash:
+          type: string
+          description: hash de la transacción.
+        status:
+          type: string
+          description: resultado de la transacción.
+        message:
+          type: string
+          description: mensaje del resultado de la registración.
+        public_key:
+          type: string
+          description: clave pública de la cuenta.
+        private_key:
+          type: string
+          description: clave privada de la cuenta.
+      description: Datos de la nueva cuenta Y-Token
+      example:
+        account_id: song@ytoken
+        hash: fba2b8e3310c363b1f7618cfb430377d62bc1500089f1be4d6544005d71cfcbe
+        message: Register Success!!! Please write down your keys in a sufficiently
+          secure place.
+        public_key: c74fe98279b7d36cf2e63b47bde81f192388302cfb548680b382b5a8ea588643
+        private_key: 98d861491a1e737d9ae7a491c5d3db776e3633e19eb1aba3fa3e0acf7f9d51c2
+    Balance:
+      type: object
+      properties:
+        asset_id:
+          type: string
+          description: Id de Y-Token.
+        balance:
+          type: number
+          description: saldo de Y-Token de la cuenta.
+      description: saldo de una cuenta Y-Token
+      example:
+        asset_id: ytoken#emarket
+        balance: 238
+    Topup:
+      type: object
+      properties:
+        hash:
+          type: string
+          description: hash de la transacción.
+        status:
+          type: string
+          description: resultado de la transacción.
+      description: resultado del aumento de saldo de una cuenta Y-Token
+      example:
+        hash: f1bdf2ec4350b24a85cd934b8f7b02e618ff934ee056be253869b899d6cff5e8
+        status: COMPLETED
+    Transfer:
+      type: object
+      properties:
+        hash:
+          type: string
+          description: hash de la transacción.
+        status:
+          type: string
+          description: resultado de la transacción.
+      description: resultado de una transferencia de Y-Token
+      example:
+        hash: 221279874fafe3ff4f1c10855a72de9e64a29b717c091f964492acabaa8410e2
+        status: COMPLETED
+    Transaction:
+      type: object
+      properties:
+        transaction:
+          type: string
+          description: detalles de una transacción.
+      description: Detalles de una transacción de Y-Token
+      example:
+        transaction: "commands {  transfer_asset {    src_account_id: \\\"leran@ytoken\\\
+          \"    dest_account_id: \\\"lee@ytoken\\\"    asset_id: \\\"ytoken#emarket\\\
+          \"    description: \\\"init top up\\\"    amount: \\\"62.34\\\"  }}creator_account_id:\
+          \ \\\"leran@ytoken\\\"created_time: 1646324984419 quorum: 1"
+    HTTP_Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          description: "A URI reference [RFC3986] that identifies the problem type"
+          format: uri
+        title:
+          type: string
+          description: short human-readable summary of the problem type
+        status:
+          type: number
+          description: HTTP status code
+        detail:
+          type: string
+          description: human-readable explanation specific to this occurrence of the
+            problem
+        instance:
+          type: string
+          description: A URI reference that identifies the specific occurrence of
+            the problem.  It may or may not yield further information if dereferenced
+          format: uri
+      description: Problem Details for HTTP APIs
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7807
+  responses:
+    Response_404:
+      description: "`NOT FOUND`: recurso no disponible"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-404:
+              $ref: '#/components/examples/response-http-404'
+    Response_412:
+      description: "`PRECONDITION FAILED`: no se cumple alguna condición previa"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-412:
+              $ref: '#/components/examples/response-http-412'
+    Response_422:
+      description: "`UNPROCESSABLE ENTITY`: falta algún dato necesario"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-422:
+              $ref: '#/components/examples/response-http-422'
+  parameters:
+    accountId:
+      name: accountId
+      in: path
+      description: El id de la cuenta
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    assetDomain:
+      name: assetDomain
+      in: path
+      description: Nombre del dominio al que pertenece el Y-Token
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+  examples:
+    response-http-404:
+      value:
+        type: https://httpstatuses.com/404
+        title: NOT FOUND
+        status: 404
+        detail: El recurso solicitado no está disponible...
+        instance: about:blank
+    response-http-412:
+      value:
+        type: https://httpstatuses.com/412
+        title: PRECONDITION FAILED
+        status: 412
+        detail: No se cumple alguna condición previa...
+        instance: about:blank
+    response-http-422:
+      value:
+        type: https://httpstatuses.com/422
+        title: UNPROCESSABLE ENTITY
+        status: 422
+        detail: Falta algún dato necesario...
+        instance: about:blank
+  requestBodies:
+    accountRB:
+      description: Datos rqueridos para crear una nueva cuenta Y-Token
+      content:
+        application/json:
+          schema:
+            required:
+            - acc_name
+            type: object
+            properties:
+              acc_name:
+                pattern: "^[a-zA-Z0-9]*$"
+                type: string
+                description: Nombre de la cuenta Y-Token
+            example:
+              acc_name: zero2
+      required: true
+    topupRB:
+      description: cantidad de saldo que aumenta
+      content:
+        application/json:
+          schema:
+            required:
+            - amount
+            - domain_admin_acc_name
+            type: object
+            properties:
+              domain_admin_acc_name:
+                type: string
+                description: Nombre de la cuenta deel administrador del dominio Y-Token
+              amount:
+                type: string
+                description: Cantidad de Y-Token que quiere aumentar
+            example:
+              domain_admin_acc_name: admin_emarket
+              amount: 88.98
+      required: true
+    transferRB:
+      description: datos de una transferencia Y-Token
+      content:
+        application/json:
+          schema:
+            required:
+            - amount
+            - dest_acc_name
+            - src_acc_name
+            type: object
+            properties:
+              src_acc_name:
+                type: string
+                description: Nombre de la cuenta remitente.
+              dest_acc_name:
+                type: string
+                description: Nombre de la cuenta destinataria.
+              amount:
+                type: string
+                description: cantidad de ytonken
+            example:
+              src_acc_name: song
+              dest_acc_name: luis
+              amount: 86.98
+      required: true
+  headers:
+    ETag:
+      description: Entity Tag (identificador único proporcionado para validación de
+        caché)
+      style: simple
+      explode: false
+      schema:
+        pattern: "[0-9a-f]*"
+        type: string
+        example: 24f21ae791234aeb
+        x-faker: random.uuid
+    Location:
+      description: '`URI` del nuevo recurso'
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: url
+        example: clientes/133
+        x-faker: internet.url
+    Allow:
+      description: Lista de métodos HTTP soportados
+      style: simple
+      explode: false
+      schema:
+        type: string
+      example: "GET, POST"
+  securitySchemes:
+    PrivateKey:
+      type: apiKey
+      name: ACCOUNT-PRIVATE-KEY
+      in: header
+      x-apikeyInfoFunc: swagger_server.controllers.authorization_controller.check_PrivateKey
+    DomainAdminPrivateKey:
+      type: apiKey
+      name: DOMAIN-ADMIN-PRIVATE-KEY
+      in: header
+      x-apikeyInfoFunc: swagger_server.controllers.authorization_controller.check_DomainAdminPrivateKey
+
