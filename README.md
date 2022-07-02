@@ -7,12 +7,12 @@ Mira [Despliegue del proyecto](#despliegue-del-proyecto) para conocer como despl
 
 ### Pre-requisitos:
 Para su despliegue necesitamos dos máquinas, una máquina virtual como servidor y otra máquina real como cliente.
-Máquina virtual(Ubuntu 20.04.2 LTS x64)
+1. Máquina virtual(Ubuntu 20.04.2 LTS x64)
 - Dirección IP: **192.168.146.150** con acceso a internet
 - Docker version: 20.10.5
 - Docker-compose version: 1.26.0
 - Conexión con la máquina real
-Máquina real (Windows 10)
+2. Máquina real (Windows 10)
 - Navegador Google Chrome
 - Conexión con la máquina virtual
 
@@ -27,7 +27,7 @@ Para simplificar el proceso de despliegue, se ha creado un fichero docker-compos
        sudo docker-compose up
   ```
 ### Máquina real:
-  3. Abir el Chrome con el CORS desabilitaod haciendo Win+R y introduciendo siguiente:
+  3. Abir el Chrome con el CORS desabilitado haciendo Win+R y ejecutar siguiente comando:
   ```
        chrome.exe --user-data-dir="C://Chrome dev session" --disable-web-security
   ```
