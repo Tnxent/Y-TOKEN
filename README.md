@@ -146,3 +146,43 @@ En este apartado se realizan pruebas de las funciones principales del proyecto.
 
     Your balance: 40.9
   ```
+  
+## más funciones:
+### Creación de dominios
+#### Máquina virtual:
+  - Acceder a Iroha-cli como administrador de Y-Token y seguir los siguientes pasos: 
+  ```
+       1. New transaction (tx) 
+       10. Create Domain (crt_dmn)
+       Domain Id: pethome 
+       Default Role name: user
+       2. Send to Iroha peer (send)
+       Peer address (172.29.101.121): 172.29.101.121
+       Peer port (50051): 50051     
+  ```
+### Creación de tokens
+#### Máquina virtual:
+  - Acceder a Iroha-cli como administrador de Y-Token y seguir los siguientes pasos: 
+  ```
+       1. New transaction (tx) 
+       14. Create Asset (crt_ast)
+       Asset name: ytoken
+       Domain Id: pethome
+       Asset precision: 2
+       2. Send to Iroha peer (send)
+       Peer address (172.29.101.121): 172.29.101.121
+       Peer port (50051): 50051     
+  ```
+### Añadir un nuevo par
+#### Máquina virtual:
+  - El nuevo par debe tener el bloque génesis original y su clave pública y privada: 
+  - Acceder a Iroha-cli como administrador de Y-Token y seguir los siguientes pasos: 
+  ```
+       1. New transaction (tx) 
+       15. Add Peer to Iroha Network (add_peer)
+       Full address of a peer: 192.168.146.120
+       Public Key: 0000000000000000000000000000000000000000000000000000000000000000
+       2. Send to Iroha peer (send)
+       Peer address (172.29.101.121): 172.29.101.121
+       Peer port (50051): 50051     
+  ```
