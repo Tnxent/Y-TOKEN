@@ -8,23 +8,20 @@ Mira [Despliegue del proyecto](#despliegue-del-proyecto) para conocer como despl
 ### Pre-requisitos:
 Para su despliegue necesitamos dos máquinas, una máquina virtual como servidor y otra máquina real como cliente.
 Máquina virtual(Ubuntu 20.04.2 LTS x64)
-     * Dirección IP: **192.168.146.150** con acceso a internet
-     * Docker version: 20.10.5
-     * Docker-compose version: 1.26.0
-     * Conexión con la máquina real
+- Dirección IP: **192.168.146.150** con acceso a internet
+- Docker version: 20.10.5
+- Docker-compose version: 1.26.0
+- Conexión con la máquina real
 Máquina real (Windows 10)
-     * Navegador Google Chrome
-     * Conexión con la máquina virtual
+- Navegador Google Chrome
+- Conexión con la máquina virtual
 
 ## Despliegue del proyecto:
 Para simplificar el proceso de despliegue, se ha creado un fichero docker-compose que nos permite poner en marcha el proyecto completo con un solo commando.
 
 ### Máquina virtual:
-  1. Clonar siguientes fichero y carpetas y agruparlos en un mismo directorio de la máquina virtual 
-       * [docker-compose.yml](path%20with%20spaces/other_file.md)
-       * [node1](path%20with%20spaces/other_file.md)
-       * [node2](path%20with%20spaces/other_file.md)
-       * [node3](path%20with%20spaces/other_file.md)
+  1. Clonar siguiente directorio con sus contenidos en la máquina virtual:
+      ([quick-deploy](https://github.com/Tnxent/Y-TOKEN/tree/main/quick-deploy))
   2. Abir el terminal, navegar al directorio donde reside el fichero docker-compose y ejecutar siguente comando: 
   ```
        sudo docker-compose up
@@ -42,12 +39,12 @@ Para simplificar el proceso de despliegue, se ha creado un fichero docker-compos
   
 ## Pruebas:
 En este apartado se realizan pruebas de las funciones principales del proyecto.
-     * Emisión de Y-Token y su asignación al administrador de un dominio
-     * Registración de una cuenta Y-Token
-     * Aumento de saldo de una cuenta Y-Token
-     * Transferencia de Y-Token
-     * Consulta de una transferencia Y-Token
-     * Consulta de saldo de una cuenta Y-Token
+- Emisión de Y-Token y su asignación al administrador de un dominio
+- Registración de una cuenta Y-Token
+- Aumento de saldo de una cuenta Y-Token
+- Transferencia de Y-Token
+- Consulta de una transferencia Y-Token
+- Consulta de saldo de una cuenta Y-Token
 
 
 ### Emisión de Y-Token y su asignación al administrador de un dominio
