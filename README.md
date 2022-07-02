@@ -1,5 +1,5 @@
 # Y-TOKEN
-Y-Token es un proyecto basado en la tecnología Hyperledger Iroha que permite crear una red de cadena de bloques (Blockchain) de tipo consorcio que permite emitir tokens personalizados según las necesidades de sus dominios.
+Y-Token es un proyecto basado en la tecnología Hyperledger Iroha que permite crear una red de cadena de bloques (Blockchain) de tipo consorcio que es capaz de emitir tokens personalizados según las necesidades de sus dominios.
 
 ## Comenzando:
 Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento para propósitos de desarrollo y pruebas.
