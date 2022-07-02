@@ -111,9 +111,6 @@ En este apartado se realizan pruebas de las funciones principales del proyecto.
 ### Transferencia de Y-Token
 #### Máquina real:
   7. Para esta prueba, se hará una compra en E-Marketplace, elegir un producto de la página principal de E-Maeketplace y hacer llegar hasta la página de confirmación de pedido:
-  ```
-
-  ```
   8. introducir el nombre del usuario y la clave privada de la cuenta Y-Token, luego dar al botón Submit, depúes de unos segundos se refrescará la página y se va a mostrar el código hash de la transacción realizada.
   ```
     Paid at 2021-12-02T13:06:19.161Z
