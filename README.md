@@ -42,13 +42,13 @@ Para simplificar el proceso de despliegue, se ha creado un fichero docker-compos
   
 ## Pruebas:
 En este apartado se realizan pruebas de las funciones principales del proyecto.
-     * Emisión de Y-Token y su asignación al administrador de un dominio.
-     * Registración de una cuenta Y-Token.
-     * Aumento de saldo de una cuenta Y-Token.
-     * Transferencia de Y-Token.
-     * Consulta de saldo de una cuenta Y-Token.
-     * Transferencia de Y-Token.
-     * Consulta de una transferencia Y-Token.
+     * Emisión de Y-Token y su asignación al administrador de un dominio
+     * Registración de una cuenta Y-Token
+     * Aumento de saldo de una cuenta Y-Token
+     * Transferencia de Y-Token
+     * Consulta de una transferencia Y-Token
+     * Consulta de saldo de una cuenta Y-Token
+
 
 ### Emisión de Y-Token y su asignación al administrador de un dominio
 #### Máquina virtual:
@@ -113,4 +113,42 @@ En este apartado se realizan pruebas de las funciones principales del proyecto.
    Your Account: test007@ytoken
 
    Transaction Hash: 0000000000000000000000000000000000000000000000000000000000000000000000
+  ```
+### Transferencia de Y-Token
+#### Máquina real:
+  7. Para esta prueba, se realizará una compra en E-Marketplace, elegir un producto de la página principal y llegar hasta la página de confirmación de pedido:
+  ```
+
+  ```
+  8. introducir el nombre del usuario y la clave privada de la cuenta Y-Token, luego dar al botón Submit, depúes de unos segundos se refrescará la página y se va a mostrar el código hash de la transacción realizada.
+  ```
+    Paid at 2021-12-02T13:06:19.161Z
+
+    Transaction Hash: 0000000000000000000000000000000000000000000000000000000000000000000000
+  ```
+### Consulta de una transferencia Y-Token
+#### Máquina real:
+  9. Abir la página de consulta de transacciones de Y-Token introduciendo en la barra de direcciones:
+  ```
+  http://192.168.146.150:3000/ytokentransactionquery
+  ```
+  10. introducir el código hash de la compra anterior y dar al botón OK.
+  ```
+    Y-Token
+
+
+    Transaction Detail: commands { transfer_asset { src_account_id: "test007@ytoken" dest_account_id: "david@ytoken" asset_id: "ytoken#emarket" description: "init top up" amount: "34.91" } } creator_account_id: "test007@ytoken" created_time: 1656767174946 quorum: 1
+  ```
+### Consulta de saldo de una cuenta Y-Token
+#### Máquina real:
+  11. Abir la página de consulta de saldo de Y-Token introduciendo en la barra de direcciones:
+  ```
+  http://192.168.146.150:3000/ytoken
+  ```
+  12. introducir el nombre del usuario y la clave privada de la cuenta Y-Token, luego dar al botón OK y se mostrará el saldo actual de la cuenta:
+  ```
+    Y-Token#emarket
+
+
+    Your balance: 40.9
   ```
