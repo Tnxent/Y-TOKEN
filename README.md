@@ -54,7 +54,7 @@ En este apartado se realizan pruebas de las funciones principales del proyecto.
        sudo docker exec -it ytoken-iroha1 /bin/bash
        iroha-cli -account_name admin@ytoken
   ```
-  2. Seguir siguientes pasos para asignar 1000 Y-Tokens para la cuenta del administrador de E-Marketplace: 
+  2. Seguir siguientes pasos para emitir 1000 Y-Tokens para el dominio E-Marketplace: 
   ```
        1. New transaction (tx) 
        16. Add Asset Quantity (add_ast_qty) 
@@ -64,6 +64,7 @@ En este apartado se realizan pruebas de las funciones principales del proyecto.
        Peer address (0.0.0.0): 172.29.101.121
        Peer port (50051): 50051     
   ```
+  3. Seguir siguientes pasos para asignar 1000 Y-Tokens para la cuenta del administrador de E-Marketplace: 
   ```
        1. New transaction (tx) 
        5. Transfer Assets (tran_ast) 
@@ -77,11 +78,11 @@ En este apartado se realizan pruebas de las funciones principales del proyecto.
   ```
 ### Registración de una cuenta Y-Token
 #### Máquina real:
-  3. Abir la página de registración de cuentas Y-Token introduciendo en la barra de direcciones:
+  4. Abir la página de registración de cuentas Y-Token introduciendo en la barra de direcciones:
   ```
        http://192.168.146.150:3000/ytokenregister
   ```
-  4. introducir un nombre de usuario y dar al botón Sign Up, después de varios segundos se mostrará tanto la clave pública como la clave privada del usuario que se debe apuntar en un sitio suficientemente seguro:
+  5. introducir un nombre de usuario y dar al botón Sign Up, después de varios segundos se mostrará tanto la clave pública como la clave privada del usuario que se debe apuntar en un sitio suficientemente seguro:
   ```
        Y-Token
 
