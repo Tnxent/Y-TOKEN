@@ -147,7 +147,7 @@ En este apartado se realizan pruebas de las funciones principales del proyecto.
     Your balance: 40.9
   ```
   
-## más funciones:
+## Más funciones:
 ### Creación de dominios
 #### Máquina virtual:
   - Acceder a Iroha-cli como administrador de Y-Token y seguir los siguientes pasos: 
