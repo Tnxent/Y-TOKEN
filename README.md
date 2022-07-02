@@ -5,7 +5,7 @@ Y-Token es un proyecto basado en la tecnología Hyperledger Iroha que permite cr
 Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento para propósitos de desarrollo y pruebas.
 Mira [Despliegue del proyecto](#despliegue-del-proyecto) para conocer como desplegar el proyecto.
 
-### Pre-requisitos:
+### Pre-requisitos para el despliegue del proyecto:
 Para su despliegue necesitamos dos máquinas, una máquina virtual como servidor y otra máquina real como cliente.
 1. Máquina virtual(Ubuntu 20.04.2 LTS x64)
 - Dirección IP: **192.168.146.150** con acceso a internet
