@@ -82,13 +82,16 @@ function App() {
                 <Link to="/ytoken" target="_blank" rel="noopener noreferrer">
                   Y-Token
                 </Link>
-                <ul className="dropdown-content">
+                <ul className="dropdown-content">            
                   <li>
                     <Link to="/ytokenregister">Register</Link>
                   </li>
                   <li>
                     <Link to="/ytokenaddfounds">Recharge</Link>
                   </li>
+                  <li>
+                    <Link to="/ytoken">Balance</Link>
+                  </li>                        
                   <li>
                     <Link to="/ytokentransactionquery">TX Query</Link>
                   </li>

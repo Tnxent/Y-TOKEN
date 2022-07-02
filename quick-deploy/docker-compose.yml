@@ -1,0 +1,241 @@
+# versión de docker-compose.
+version: '3.5'
+
+# configración de redes.
+networks:
+
+  # red interna de Y-Token.
+  ytoken-network:
+    name: ytoken-network
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.29.101.0/24
+
+  # red interna del dominio E-Marketplace.
+  em-internal-network:
+
+  # red púbica, donde se conectan Y-API y todos los dominios de Y-Token.
+  public-network:
+    name: public-network
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.29.102.0/24
+
+# configración de volúmenes
+volumes:
+
+  # volumen para ytoken-postgres1.
+  ytoken-postgres-vol1:
+    name: ytoken-postgres-vol1
+
+  # volumen para ytoken-postgres2.
+  ytoken-postgres-vol2:
+    name: ytoken-postgres-vol2
+
+  # volumen para ytoken-postgres3.
+  ytoken-postgres-vol3:
+    name: ytoken-postgres-vol3
+
+  # volumen para la cadena de bloques de ytoken-postgres1 (par 1).
+  blockstore1:
+    name: blockstore1
+
+  # volumen para la cadena de bloques de ytoken-postgres2 (par 2).
+  blockstore2:
+    name: blockstore2
+
+  # volumen para la cadena de bloques de ytoken-postgres3 (par 3).
+  blockstore3:
+    name: blockstore3
+
+  # volumen para la base de datos de E-Marketplace.
+  em-db_data:
+    name: em-db_data
+
+# configración de servicios.
+services:
+
+  # BD Par 1
+  ytoken-postgres1:
+    image: postgres:13
+    container_name: ytoken-postgres1
+    command: -c max_prepared_transactions=100
+    restart: unless-stopped  
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+    networks:
+      ytoken-network:
+        ipv4_address: 172.29.101.21
+    volumes:
+      - type: volume
+        source: ytoken-postgres-vol1
+        target: /var/lib/postgresql/data
+
+  # Par 1
+  ytoken-iroha1:
+    image: hyperledger/iroha:1.1.1
+    container_name: ytoken-iroha1
+    restart: unless-stopped  
+    depends_on:
+      - ytoken-postgres1
+    tty: true
+    environment:
+      - KEY=node1
+    entrypoint:
+      - /opt/iroha_data/entrypoint.sh
+    networks:
+      ytoken-network:
+        ipv4_address: 172.29.101.121
+    volumes:
+      - ./node1:/opt/iroha_data
+      - type: volume
+        source: blockstore1
+        target: /tmp/block_store1
+    ports:
+      - 50051:50051
+
+  # BD Par 2
+  ytoken-postgres2:
+    image: postgres:13
+    container_name: ytoken-postgres2
+    command: -c max_prepared_transactions=100
+    restart: unless-stopped  
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+    networks:
+      ytoken-network:
+        ipv4_address: 172.29.101.22
+    volumes:
+      - type: volume
+        source: ytoken-postgres-vol2
+        target: /var/lib/postgresql/data
+
+  # Par 2
+  ytoken-iroha2:
+    image: hyperledger/iroha:1.1.1
+    container_name: ytoken-iroha2
+    restart: unless-stopped  
+    depends_on:
+      - ytoken-postgres2
+    tty: true
+    environment:
+      - KEY=node2
+    entrypoint:
+      - /opt/iroha_data/entrypoint.sh
+    networks:
+      ytoken-network:
+        ipv4_address: 172.29.101.122
+    volumes:
+      - ./node2:/opt/iroha_data
+      - type: volume
+        source: blockstore2
+        target: /tmp/block_store2
+    ports:
+      - 50052:50052
+
+  # BD Par 3
+  ytoken-postgres3:
+    image: postgres:13
+    container_name: ytoken-postgres3
+    command: -c max_prepared_transactions=100
+    restart: unless-stopped  
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+    networks:
+      ytoken-network:
+        ipv4_address: 172.29.101.23
+    volumes:
+      - type: volume
+        source: ytoken-postgres-vol3
+        target: /var/lib/postgresql/data
+
+  # Par 3
+  ytoken-iroha3:
+    image: hyperledger/iroha:1.1.1
+    container_name: ytoken-iroha3
+    restart: unless-stopped  
+    depends_on:
+      - ytoken-postgres3
+    tty: true
+    environment:
+      - KEY=node3
+    entrypoint:
+      - /opt/iroha_data/entrypoint.sh
+    networks:
+      ytoken-network:
+        ipv4_address: 172.29.101.123
+    volumes:
+      - ./node3:/opt/iroha_data
+      - type: volume
+        source: blockstore3
+        target: /tmp/block_store3
+    ports:
+      - 50053:50053
+
+  # Y-API
+  y-api:
+    image: zcj583/y-api:latest
+    container_name: y-api
+    restart: unless-stopped  
+    networks:
+      ytoken-network:
+        ipv4_address: 172.29.101.100
+      public-network:
+        ipv4_address: 172.29.102.100
+    ports:
+      - 8080:8080
+    depends_on:
+      - ytoken-iroha1
+      - ytoken-iroha2
+      - ytoken-iroha3
+
+
+  # cliente de E-Marketplace.
+  emarketplace-frontend:
+    depends_on:
+      - emarketplace-backend
+    image: zcj583/emarketplace-frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - em-internal-network
+      - public-network
+
+  # servidor de E-Marketplace.
+  emarketplace-backend:
+    depends_on:
+      - emarketplace-db     
+    image: zcj583/emarketplace-backend
+    ports:
+      - "5000:5000"
+    networks:
+      - em-internal-network
+
+  # BD de E-Marketplace.
+  emarketplace-db:
+    image: mongo
+    restart: always
+    networks:
+      - em-internal-network
+    environment:
+      MONGO_INITDB_DATABASE: emarketplace
+    ports:
+      - 27017:27017
+    volumes:
+      - em-db_data:/var/lib/mongo
+
+  # Datos iniciales de E-Marketplace.
+  mongo-seed:
+    image: zcj583/mongo-seed
+    depends_on:
+      - emarketplace-db
+    networks:
+      - em-internal-network
+
+
+

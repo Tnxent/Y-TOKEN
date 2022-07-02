@@ -136,6 +136,20 @@
                              "accountId":"admin_emarket@ytoken",
                              "roleName":"domain_admin"
                           }
+                       },
+                       {
+                          "createAccount":{
+                             "accountName":"david",
+                             "domainId":"ytoken",
+                             "publicKey":"0133ad72e833e4e4697584bdbba3ad9146d49e24b8620e54b1024a32e2e2346b"
+                          }
+                       },
+                       {
+                          "createAccount":{
+                             "accountName":"vendedor111",
+                             "domainId":"ytoken",
+                             "publicKey":"147ae1482dabde89941e22929618f3031443c3e86e5e26211ad8616a51a83fdb"
+                          }
                        }
                     ],
                     "quorum":1

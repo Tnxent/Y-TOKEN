@@ -58,7 +58,7 @@ class YtokenCheckMyBalanceForm extends Component{
         this.props.setBalance(this.state.ytokenBalance, ' ')
       }
       else{
-        this.props.setBalance(' ', 'Seems like you dont hay any Y-Token of this domain in your account.')
+        this.props.setBalance(' ', "Seems like you don't hay any Y-Token of this domain in your account.")
       }
       this.setState({
         isLoading: false,

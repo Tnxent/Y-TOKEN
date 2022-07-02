@@ -272,12 +272,6 @@ export default function OrderScreen(props) {
               </li>
               <li>
                 <div className="row">
-                  <div>Shipping</div>
-                  <div>${order.shippingPrice.toFixed(2)}</div>
-                </div>
-              </li>
-              <li>
-                <div className="row">
                   <div>Tax</div>
                   <div>${order.taxPrice.toFixed(2)}</div>
                 </div>

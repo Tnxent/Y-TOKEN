@@ -13,13 +13,13 @@ from iroha.primitive_pb2 import can_transfer_my_assets
 # Informaciones sobre los pares de la red y la cuenta del administrador:
 
 # Iroha par 1
-IROHA_HOST_ADDR_1 = os.getenv('IROHA_HOST_ADDR_1', '192.168.146.132')
+IROHA_HOST_ADDR_1 = os.getenv('IROHA_HOST_ADDR_1', '172.29.101.21')
 IROHA_PORT_1 = os.getenv('IROHA_PORT_1', '50051')
 # Iroha par 2
-IROHA_HOST_ADDR_2 = os.getenv('IROHA_HOST_ADDR_2', '192.168.146.132')
+IROHA_HOST_ADDR_2 = os.getenv('IROHA_HOST_ADDR_2', '172.29.101.22')
 IROHA_PORT_2 = os.getenv('IROHA_PORT_2', '50052')
 # Iroha par 3
-IROHA_HOST_ADDR_3 = os.getenv('IROHA_HOST_ADDR_2', '192.168.146.132')
+IROHA_HOST_ADDR_3 = os.getenv('IROHA_HOST_ADDR_2', '172.29.101.23')
 IROHA_PORT_3 = os.getenv('IROHA_PORT_3', '50053')
 
 ADMIN_ACCOUNT_ID = os.getenv('ADMIN_ACCOUNT_ID', 'admin@ytoken')

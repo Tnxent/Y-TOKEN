@@ -57,7 +57,7 @@ export default function ProductEditScreen(props) {
           image,
           category,
           brand,
-          countInStock,
+          countInStock: 100,
           content,
           description,
         })
@@ -68,10 +68,10 @@ export default function ProductEditScreen(props) {
 
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
-  const uploadFileHandler = async (e) => {
+  const uploadImageFileHandler = async (e) => {
     const file = e.target.files[0];
     const bodyFormData = new FormData();
-    bodyFormData.append('image', file);
+    bodyFormData.append('file', file);
     setLoadingUpload(true);
     try {
       const { data } = await Axios.post('/api/uploads', bodyFormData, {
@@ -81,6 +81,26 @@ export default function ProductEditScreen(props) {
         },
       });
       setImage(data);
+      setLoadingUpload(false);
+    } catch (error) {
+      setErrorUpload(error.message);
+      setLoadingUpload(false);
+    }
+  };
+
+  const uploadContentFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const bodyFormData = new FormData();
+    bodyFormData.append('file', file);
+    setLoadingUpload(true);
+    try {
+      const { data } = await Axios.post('/api/uploads', bodyFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+      setContent(data);
       setLoadingUpload(false);
     } catch (error) {
       setErrorUpload(error.message);
@@ -138,7 +158,7 @@ export default function ProductEditScreen(props) {
                 type="file"
                 id="imageFile"
                 label="Choose Image"
-                onChange={uploadFileHandler}
+                onChange={uploadImageFileHandler}
               ></input>
               {loadingUpload && <LoadingBox></LoadingBox>}
               {errorUpload && (
@@ -166,16 +186,6 @@ export default function ProductEditScreen(props) {
               ></input>
             </div>
             <div>
-              <label htmlFor="countInStock">Count In Stock</label>
-              <input
-                id="countInStock"
-                type="text"
-                placeholder="Enter countInStock"
-                value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
-              ></input>
-            </div>
-            <div>
               <label htmlFor="content">Content</label>
               <input
                 id="content"
@@ -184,6 +194,19 @@ export default function ProductEditScreen(props) {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               ></input>
+            </div>
+            <div>
+              <label htmlFor="contentFile">Content File</label>
+              <input
+                type="file"
+                id="contentFile"
+                label="Choose Content"
+                onChange={uploadContentFileHandler}
+              ></input>
+              {loadingUpload && <LoadingBox></LoadingBox>}
+              {errorUpload && (
+                <MessageBox variant="danger">{errorUpload}</MessageBox>
+              )}
             </div>
             <div>
               <label htmlFor="description">Description</label>
