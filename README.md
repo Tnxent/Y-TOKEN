@@ -9,11 +9,11 @@ Mira [Despliegue del proyecto](#despliegue-del-proyecto) para conocer como despl
 Para su despliegue necesitamos dos máquinas, una máquina virtual como servidor y otra máquina real como cliente.
 1. Máquina virtual(Ubuntu 20.04.2 LTS x64)
 - Dirección IP: **192.168.146.150** con acceso a internet
-- Docker version: 20.10.5
-- Docker-compose version: 1.26.0
+- **Docker** version: 20.10.5
+- **Docker-compose** version: 1.26.0
 - Conexión con la máquina real
 2. Máquina real (Windows 10)
-- Navegador Google Chrome
+- Navegador **Google Chrome**
 - Conexión con la máquina virtual
 
 ## Despliegue del proyecto:
